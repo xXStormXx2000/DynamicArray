@@ -1,5 +1,7 @@
 #pragma once
 #include <stdexcept>
+#include <initializer_list>
+
 template<class T>
 class DynamicArray {
 private:
@@ -8,8 +10,10 @@ private:
     int memSize;
 public:
     DynamicArray(int s = 0);
-    DynamicArray(const DynamicArray<T>& other);
+    DynamicArray(const DynamicArray<T>&);
+    DynamicArray(std::initializer_list<T>);
     DynamicArray<T>& operator = (const DynamicArray<T>&);
+    DynamicArray<T>& operator = (std::initializer_list<T>);
     ~DynamicArray();
     bool operator==(const DynamicArray<T>&);
     T& operator[](int);
@@ -32,11 +36,34 @@ DynamicArray<T>::DynamicArray(const DynamicArray<T>& other) : siz(other.siz), me
 }
 
 template<class T>
+DynamicArray<T>::DynamicArray(std::initializer_list<T> list) : siz(list.size()), memSize(list.size() + 1) {
+    c = static_cast<T*>(malloc(memSize * sizeof(T)));
+    int count = 0;
+    for (T i : list) {
+        c[count] = i;
+        count++;
+    }
+}
+
+template<class T>
 DynamicArray<T>& DynamicArray<T>::operator=(const DynamicArray<T>& other) {
     siz = other.siz;
     memSize = other.memSize;
     c = static_cast<T*>(malloc(memSize * sizeof(T)));
     for (int i = 0; i < other.siz; i++) c[i] = other.c[i];
+    return *this;
+}
+
+template<class T>
+DynamicArray<T>& DynamicArray<T>::operator=(std::initializer_list<T> list) {
+    siz = list.size();
+    memSize = list.size() + 1;
+    c = static_cast<T*>(malloc(memSize * sizeof(T)));
+    int count = 0;
+    for (T i : list) {
+        c[count] = i;
+        count++;
+    }
     return *this;
 }
 
@@ -64,7 +91,7 @@ int DynamicArray<T>::size() { return siz; }
 template<class T>
 void DynamicArray<T>::pushBack(T newElem) {
     if (memSize == siz) {
-        memSize = memSize * 2;
+        memSize *= 2;
         T* temp = static_cast<T*>(realloc(c, memSize * sizeof(T)));
         if (temp != NULL) c = temp;
     }
