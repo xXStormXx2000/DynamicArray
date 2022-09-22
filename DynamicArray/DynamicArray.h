@@ -58,7 +58,7 @@ public:
         if (s < 0) throw std::invalid_argument("The size is negative");
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
     }
-    DynamicArray(int s, T val) : siz(s), memSize(s + 1) {
+    DynamicArray(int s, const T& val) : siz(s), memSize(s + 1) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
         for (int i = 0; i < siz; i++) c[i] = val;
