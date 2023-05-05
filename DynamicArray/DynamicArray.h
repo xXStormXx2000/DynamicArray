@@ -1,3 +1,4 @@
+
 #pragma once
 #include <stdexcept>
 #include <initializer_list>
@@ -37,10 +38,10 @@ public:
     valueType& operator*() {
         return *mPtr;
     }
-    bool operator==(const DynamicArrayIterator& other) {
+    bool operator==(const DynamicArrayIterator& other) const {
         return mPtr == other.mPtr;
     }
-    bool operator!=(const DynamicArrayIterator& other) {
+    bool operator!=(const DynamicArrayIterator& other) const {
         return mPtr != other.mPtr;
     }
 };
@@ -52,8 +53,8 @@ public:
     using Iterator = DynamicArrayIterator<DynamicArray<T>>;
 private:
     T* c;
-    int siz;
-    int memSize;
+    size_t siz;
+    size_t memSize;
 public:
     //Constructor
     DynamicArray(int s = 0) : siz(s), memSize(s + 1) {
@@ -81,7 +82,7 @@ public:
         }
     }
     //Move Constructor
-    DynamicArray(DynamicArray<T>&& other) : siz(other.siz), memSize(other.memSize) {
+    DynamicArray(DynamicArray<T>&& other) noexcept : siz(other.siz), memSize(other.memSize) {
         c = other.c;
         other.c = nullptr;
         other.siz = 0;
@@ -111,7 +112,7 @@ public:
     }
 
     //Move Operator
-    DynamicArray<T>& operator=(DynamicArray<T>&& other) {
+    DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept {
         siz = other.siz;
         memSize = other.memSize;
         free(c);
@@ -125,16 +126,16 @@ public:
     ~DynamicArray() {
         free(c);
     }
-    bool operator==(const DynamicArray<T>& other) {
+    bool operator==(const DynamicArray<T>& other) const {
         if (siz != other.siz) return false;
         for (int i = 0; i < siz; i++) if (c[i] != other.c[i]) return false;
         return true;
     }
-    T& operator[](int n) {
+    T& operator[](int n) const {
         if (n >= siz || n < 0) throw std::out_of_range("Out of range");
         return c[n];
     }
-    int size() { return siz; }
+    int size() const { return siz; }
     void pushBack(T newElem) {
         if (memSize == siz) {
             memSize *= 2;
@@ -153,10 +154,10 @@ public:
         }
         return c[siz];
     }
-    Iterator begin() {
+    Iterator begin() const {
         return Iterator(c);
     }
-    Iterator end() {
+    Iterator end() const {
         return Iterator(c + siz);
     }
 };
