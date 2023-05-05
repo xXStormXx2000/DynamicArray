@@ -1,6 +1,8 @@
 #pragma once
 #include <stdexcept>
 #include <initializer_list>
+#include <iostream>
+
 template<typename dArray>
 class DynamicArrayIterator {
 public:
@@ -54,20 +56,24 @@ private:
     int siz;
     int memSize;
 public:
+    //Constructor
     DynamicArray(int s = 0) : siz(s), memSize(s + 1) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
     }
+    //Constructor
     DynamicArray(int s, const T& val) : siz(s), memSize(s + 1) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
         for (int i = 0; i < siz; i++) c[i] = val;
     }
+    //Copy Constructor
     DynamicArray(const DynamicArray<T>& other) : siz(other.siz), memSize(other.memSize) {
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
         for (int i = 0; i < other.siz; i++) c[i] = other.c[i];
     }
-    DynamicArray(std::initializer_list<T> list) : siz(list.size()), memSize(list.size() + 1) {
+    //Copy initializer list Constructor
+    DynamicArray(const std::initializer_list<T>& list) : siz(list.size()), memSize(list.size() + 1) {
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
         int count = 0;
         for (T i : list) {
@@ -75,16 +81,27 @@ public:
             count++;
         }
     }
+    //Move Constructor
+    DynamicArray(DynamicArray<T>&& other) : siz(other.siz), memSize(other.memSize) {
+        c = other.c;
+        other.c = nullptr;
+        other.siz = 0;
+        other.memSize = 0;
+    }
+    //Copy Operator
     DynamicArray<T>& operator=(const DynamicArray<T>& other) {
         siz = other.siz;
         memSize = other.memSize;
+        free(c);
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
         for (int i = 0; i < other.siz; i++) c[i] = other.c[i];
         return *this;
     }
-    DynamicArray<T>& operator = (std::initializer_list<T> list) {
+    //Copy Initializer list Operator
+    DynamicArray<T>& operator = (const std::initializer_list<T>& list) {
         siz = list.size();
         memSize = list.size() + 1;
+        free(c);
         c = static_cast<T*>(malloc(memSize * sizeof(T)));
         int count = 0;
         for (T i : list) {
@@ -93,6 +110,19 @@ public:
         }
         return *this;
     }
+
+    //Move Operator
+    DynamicArray<T>& operator=(DynamicArray<T>&& other) {
+        siz = other.siz;
+        memSize = other.memSize;
+        free(c);
+        c = other.c;
+        other.c = nullptr;
+        other.siz = 0;
+        other.memSize = 0;
+        return *this;
+    }
+
     ~DynamicArray() {
         free(c);
     }
