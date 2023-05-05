@@ -90,6 +90,7 @@ public:
     }
     //Copy Operator
     DynamicArray<T>& operator=(const DynamicArray<T>& other) {
+        if(&other == this) return *this;
         siz = other.siz;
         memSize = other.memSize;
         free(c);
@@ -113,6 +114,7 @@ public:
 
     //Move Operator
     DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept {
+        if (&other == this) return *this;
         siz = other.siz;
         memSize = other.memSize;
         free(c);
