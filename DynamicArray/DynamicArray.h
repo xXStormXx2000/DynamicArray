@@ -1,7 +1,6 @@
 #pragma once
 #include <stdexcept>
 #include <initializer_list>
-#include <iostream>
 
 template<typename dArray>
 class DynamicArrayIterator {
