@@ -259,7 +259,7 @@ public:
         for (int i = 0; i < temp.size(); i++) mPtr[mStart + start + i] = temp[i];
     }
     void sort() {
-        this->sort(0, mSize, [](T a, T b) { return a > b; });
+        this->sort(0, mSize - 1, [](T a, T b) { return a < b; });
     }
 private:
     T* mPtr;
