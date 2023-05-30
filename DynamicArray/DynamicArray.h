@@ -238,12 +238,14 @@ public:
     // Time = O(1)
     // Space = O(1)
     T popBack() {
+        if (mSize == 0) throw std::runtime_error("Tried to pop back on empty DynamicArray");
         mSize--;
         return mPtr[mStart + mSize];
     }
     // Time = O(1)
     // Space = O(1)
     T popFront() {
+        if (mSize == 0) throw std::runtime_error("Tried to pop front on empty DynamicArray");
         mStart++;
         mSize--;
         return mPtr[mStart - 1];
@@ -272,7 +274,8 @@ public:
     // Time = O(N*log(N))
     // Space = O(N)
     void sort(int start, int end, bool (*function)(T, T)) {
-        if (start >= end - 1) return;
+        if (start > end) throw std::invalid_argument("Start is past End");
+        if (start == end - 1 || start == end) return;
         int mid = (start + end) >> 1;
         sort(start, mid, function);
         sort(mid, end, function);
