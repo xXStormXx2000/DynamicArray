@@ -145,10 +145,10 @@ public:
         if(&other == this) return *this;
         mSize = other.mSize;
         mMemSize = other.mMemSize;
-        mStart = other.mStartM;
+        mStart = other.mStart;
         free(mPtr);
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        for (int i = 0; i < other.siz; i++) mPtr[mStart + i] = other[i];
+        for (int i = 0; i < other.mSize; i++) mPtr[mStart + i] = other[i];
         return *this;
     }
     //Copy Initializer list Operator
@@ -174,13 +174,13 @@ public:
         if (&other == this) return *this;
         mSize = other.mSize;
         mMemSize = other.mMemSize;
-        mStart = other.mStartM;
+        mStart = other.mStart;
         free(mPtr);
         mPtr = other.mPtr;
         other.mPtr = nullptr;
         other.mSize = 0;
         other.mMemSize = 0;
-        other.mStartM = 0;
+        other.mStart = 0;
         return *this;
     }
     // Time = O(1)
@@ -203,7 +203,7 @@ public:
     }
     // Time = O(1)
     // Space = O(1)
-    int size() const { return mSize; }
+    size_t size() const { return mSize; }
     // Time = O(N) If a resize is necessary else N(1), the is average is N(1)
     // Space = O(N) If a resize is necessary else N(1), the is average is N(1)
     void pushBack(T newElem) {
@@ -246,7 +246,7 @@ public:
     T popFront() {
         mStart++;
         mSize--;
-        return mPtr[mStart];
+        return mPtr[mStart - 1];
     }
     // Time = O(1)
     // Space = O(1)
@@ -268,24 +268,24 @@ public:
     ReverseIterator rEnd() const {
         return ReverseIterator(mPtr + mStart - 1);
     }
-    // sort(start inclusive, end inclusive, bool function pointer)
+    // sort(start inclusive, end exclusive, bool function pointer)
     // Time = O(N*log(N))
     // Space = O(N)
     void sort(int start, int end, bool (*function)(T, T)) {
-        if (start == end) return;
+        if (start >= end - 1) return;
         int mid = (start + end) >> 1;
         sort(start, mid, function);
-        sort(mid + 1, end, function);
-        DynamicArray temp(end - start + 1);
+        sort(mid, end, function);
+        DynamicArray temp(end - start);
         int start1 = start;
-        int start2 = mid+1;
+        int start2 = mid;
         for (int i = 0; i < temp.size(); i++) {
-            if (start1 > mid) {
+            if (start1 == mid) {
                 temp[i] = mPtr[mStart + start2];
                 start2++;
                 continue;
             }
-            if (start2 > end) {
+            if (start2 == end) {
                 temp[i] = mPtr[mStart + start1];
                 start1++;
                 continue;
@@ -300,7 +300,7 @@ public:
         }
         for (int i = 0; i < temp.size(); i++) mPtr[mStart + start + i] = temp[i];
     }
-    // sort(start inclusive, end inclusive)
+    // sort(start inclusive, end exclusive)
     // Time = O(N*log(N))
     // Space = O(N)
     void sort(int start, int end) {
@@ -309,7 +309,7 @@ public:
     // Time = O(N*log(N))
     // Space = O(N)
     void sort() {
-        this->sort(0, mSize - 1, [](T a, T b) { return a < b; });
+        this->sort(0, mSize, [](T a, T b) { return a < b; });
     }
 private:
     T* mPtr;
