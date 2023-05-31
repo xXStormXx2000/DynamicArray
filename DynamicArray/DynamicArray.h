@@ -214,6 +214,7 @@ public:
             mPtr = temp;
         }
         mSize++;
+        memset(mPtr + mStart + mSize - 1, 0, sizeof(T));
         mPtr[mStart + mSize - 1] = newElem;
     }
     // Time = O(N) If a resize is necessary else N(1), the is average is N(1)
@@ -230,6 +231,7 @@ public:
         }
         mStart--;
         mSize++;
+        memset(mPtr + mStart, 0, sizeof(T));
         mPtr[mStart] = newElem;
     }
     // Time = O(1)
