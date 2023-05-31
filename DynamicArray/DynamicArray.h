@@ -29,7 +29,7 @@ public:
         --(*this);
         return it;
     }
-    valueType& operator[](int index) {
+    valueType& operator[](size_t index) {
         return *(mPtr[index]);
     }
     valueType* operator->() {
@@ -72,7 +72,7 @@ public:
         --(*this);
         return it;
     }
-    valueType& operator[](int index) {
+    valueType& operator[](size_t index) {
         return *(mPtr[index]);
     }
     valueType* operator->() {
@@ -98,24 +98,24 @@ public:
     //Constructor
     // Time = O(1)
     // Space = O(N)
-    DynamicArray(int s = 0) : mSize(s), mMemSize(s + 2), mStart(1) {
+    DynamicArray(size_t s = 0) : mSize(s), mMemSize(s + 2), mStart(1) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
     }
     //Constructor
     // Time = O(N)
     // Space = O(N)
-    DynamicArray(int s, const T& val) : mSize(s), mMemSize(s + 2), mStart(1) {
+    DynamicArray(size_t s, const T& val) : mSize(s), mMemSize(s + 2), mStart(1) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        for (int i = mStart; i < mStart + mSize; i++) mPtr[i] = val;
+        for (size_t i = mStart; i < mStart + mSize; ++i) mPtr[i] = val;
     }
     //Copy constructor
     // Time = O(N)
     // Space = O(N)
     DynamicArray(const DynamicArray<T>& other) : mSize(other.mSize), mMemSize(other.mMemSize), mStart(other.mStart) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        for (int i = 0; i < other.mSize; i++) mPtr[mStart + i] = other[i];
+        for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
     }
     //Copy initializer list constructor
     // Time = O(N)
@@ -123,7 +123,7 @@ public:
     DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mMemSize(list.size() + 1), mStart(0) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         int count = mStart;
-        for (T i : list) {
+        for (const T& i : list) {
             mPtr[count] = i;
             count++;
         }
@@ -148,7 +148,7 @@ public:
         mStart = other.mStart;
         free(mPtr);
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        for (int i = 0; i < other.mSize; i++) mPtr[mStart + i] = other[i];
+        for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
         return *this;
     }
     //Copy Initializer list Operator
@@ -160,8 +160,8 @@ public:
         mStart = 1;
         free(mPtr);
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        int count = mStart;
-        for (T i : list) {
+        size_t count = mStart;
+        for (const T& i : list) {
             mPtr[count] = i;
             count++;
         }
@@ -186,19 +186,19 @@ public:
     // Time = O(n)
     // Space = O(1)
     ~DynamicArray() {
-        for (int i = 0; i < mSize; ++i) mPtr[mStart + i].~T();
+        for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i].~T();
         free(mPtr);
     }
     // Time = O(N) If the sizes match else O(1)
     // Space = O(1)
     bool operator==(const DynamicArray<T>& other) const {
         if (mSize != other.mSize) return false;
-        for (int i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other[i]) return false;
+        for (size_t i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other[i]) return false;
         return true;
     }
     // Time = O(1)
     // Space = O(1)
-    T& operator[](int n) const {
+    T& operator[](size_t n) const {
         if (n >= mSize || n < 0) throw std::out_of_range("Out of range");
         return mPtr[mStart + n];
     }
@@ -276,16 +276,16 @@ public:
     // sort(start inclusive, end exclusive, bool function pointer)
     // Time = O(N*log(N))
     // Space = O(N)
-    void sort(int start, int end, bool (*function)(const T&, const T&)) {
+    void sort(size_t start, size_t end, bool (*function)(const T&, const T&)) {
         if (start > end) throw std::invalid_argument("Start is past End");
         if (start == end - 1 || start == end) return;
-        int mid = (start + end) >> 1;
+        size_t mid = (start + end) >> 1;
         sort(start, mid, function);
         sort(mid, end, function);
         DynamicArray temp(end - start);
-        int start1 = start;
-        int start2 = mid;
-        for (int i = 0; i < temp.size(); i++) {
+        size_t start1 = start;
+        size_t start2 = mid;
+        for (size_t i = 0; i < temp.size(); ++i) {
             if (start1 == mid) {
                 temp[i] = mPtr[mStart + start2];
                 start2++;
@@ -304,12 +304,12 @@ public:
                 start2++;
             }
         }
-        for (int i = 0; i < temp.size(); i++) mPtr[mStart + start + i] = temp[i];
+        for (size_t i = 0; i < temp.size(); ++i) mPtr[mStart + start + i] = temp[i];
     }
     // sort(start inclusive, end exclusive)
     // Time = O(N*log(N))
     // Space = O(N)
-    void sort(int start, int end) {
+    void sort(size_t start, size_t end) {
         this->sort(start, end, [](const T& a, const T& b) { return a < b; });
     }
     // Time = O(N*log(N))
