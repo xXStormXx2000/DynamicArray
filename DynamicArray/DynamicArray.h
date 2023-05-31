@@ -186,6 +186,7 @@ public:
     // Time = O(1)
     // Space = O(1)
     ~DynamicArray() {
+        for (int i = 0; i < mSize; i++) (mPtr + mStart + i)->~T();
         free(mPtr);
     }
     // Time = O(N) If the sizes match else O(1)
