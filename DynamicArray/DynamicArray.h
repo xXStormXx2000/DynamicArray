@@ -206,7 +206,7 @@ public:
     size_t size() const { return mSize; }
     // Time = O(N) If a resize is necessary else N(1), the is average is N(1)
     // Space = O(N) If a resize is necessary else N(1), the is average is N(1)
-    void pushBack(T newElem) {
+    void pushBack(const T& newElem) {
         if (mMemSize == mStart + mSize) {
             mMemSize += mSize;
             T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
@@ -218,7 +218,7 @@ public:
     }
     // Time = O(N) If a resize is necessary else N(1), the is average is N(1)
     // Space = O(N) If a resize is necessary else N(1), the is average is N(1)
-    void pushFront(T newElem) {
+    void pushFront(const T& newElem) {
         if (0 == mStart) {
             mStart = mSize;
             mMemSize += mStart;
@@ -273,7 +273,7 @@ public:
     // sort(start inclusive, end exclusive, bool function pointer)
     // Time = O(N*log(N))
     // Space = O(N)
-    void sort(int start, int end, bool (*function)(T, T)) {
+    void sort(int start, int end, bool (*function)(const T&, const T&)) {
         if (start > end) throw std::invalid_argument("Start is past End");
         if (start == end - 1 || start == end) return;
         int mid = (start + end) >> 1;
@@ -307,12 +307,12 @@ public:
     // Time = O(N*log(N))
     // Space = O(N)
     void sort(int start, int end) {
-        this->sort(start, end, [](T a, T b) { return a < b; });
+        this->sort(start, end, [](const T& a, const T& b) { return a < b; });
     }
     // Time = O(N*log(N))
     // Space = O(N)
     void sort() {
-        this->sort(0, mSize, [](T a, T b) { return a < b; });
+        this->sort(0, mSize);
     }
 private:
     T* mPtr;
