@@ -210,7 +210,8 @@ public:
         if (mMemSize == mStart + mSize) {
             mMemSize += mSize;
             T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
-            if (temp != NULL) mPtr = temp;
+            if (temp == NULL) throw std::runtime_error("Not enough memory");
+            mPtr = temp;
         }
         mSize++;
         mPtr[mStart + mSize - 1] = newElem;
@@ -222,11 +223,10 @@ public:
             mStart = mSize;
             mMemSize += mStart;
             T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));;
-            if (temp != NULL) {
-                for (int i = 0; i < mSize; i++) temp[mStart + i] = mPtr[i];
-                free(mPtr);
-                mPtr = temp;
-            }
+            if (temp == NULL) throw std::runtime_error("Not enough memory");
+            for (int i = 0; i < mSize; i++) temp[mStart + i] = mPtr[i];
+            free(mPtr);
+            mPtr = temp;
         }
         mStart--;
         mSize++;
@@ -238,14 +238,14 @@ public:
     // Time = O(1)
     // Space = O(1)
     T popBack() {
-        if (mSize == 0) throw std::runtime_error("Tried to pop back on empty DynamicArray");
+        if (mSize == 0) throw std::logic_error("Tried to pop back on empty DynamicArray");
         mSize--;
         return mPtr[mStart + mSize];
     }
     // Time = O(1)
     // Space = O(1)
     T popFront() {
-        if (mSize == 0) throw std::runtime_error("Tried to pop front on empty DynamicArray");
+        if (mSize == 0) throw std::logic_error("Tried to pop front on empty DynamicArray");
         mStart++;
         mSize--;
         return mPtr[mStart - 1];
