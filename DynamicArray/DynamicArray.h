@@ -183,7 +183,7 @@ public:
         other.mStart = 0;
         return *this;
     }
-    // Time = O(n)
+    // Time = O(N)
     // Space = O(1)
     ~DynamicArray() {
         for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i].~T();
@@ -319,6 +319,31 @@ public:
     // Space = O(N)
     void sort() {
         this->sort(0, mSize);
+    }
+    // find(Iterator first, Iterator last, const T& val, bool function pointer)
+    // Time = O(N)
+    // Space = O(1)
+    template <typename InputIterator>
+    InputIterator find(InputIterator first, InputIterator last, const T& val, bool (*function)(const T&, const T&)) {
+        while (first != last) {
+            if (function(*first, val)) return first;
+            ++first;
+        }
+        return last;
+    }
+    // find(Iterator first, Iterator last, const T& val)
+    // Time = O(N)
+    // Space = O(1)
+    template <typename InputIterator>
+    InputIterator find(InputIterator first, InputIterator last, const T& val) {
+        return find(first, last, val, [](const T& a, const T& b) { return a == b; });
+    }
+    // find(const T& val)
+    // Time = O(N)
+    // Space = O(1)
+    template <typename InputIterator>
+    InputIterator find(const T& val) {
+        return find(this->begin(), this->end(), val);
     }
 private:
     T* mPtr;
