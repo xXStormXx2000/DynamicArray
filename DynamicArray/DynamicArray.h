@@ -341,7 +341,6 @@ public:
     // find(const T& val)
     // Time = O(N)
     // Space = O(1)
-    template <typename InputIterator>
     InputIterator find(const T& val) {
         return find(this->begin(), this->end(), val);
     }
