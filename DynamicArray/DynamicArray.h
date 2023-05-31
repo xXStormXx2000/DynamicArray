@@ -186,14 +186,14 @@ public:
     // Time = O(1)
     // Space = O(1)
     ~DynamicArray() {
-        for (int i = 0; i < mSize; i++) (mPtr + mStart + i)->~T();
+        for (int i = 0; i < mSize; ++i) (mPtr + mStart + i)->~T();
         free(mPtr);
     }
     // Time = O(N) If the sizes match else O(1)
     // Space = O(1)
     bool operator==(const DynamicArray<T>& other) const {
         if (mSize != other.mSize) return false;
-        for (int i = 0; i < mSize; i++) if (mPtr[mStart + i] != other[i]) return false;
+        for (int i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other[i]) return false;
         return true;
     }
     // Time = O(1)
@@ -224,7 +224,7 @@ public:
         if (0 == mStart) {
             mStart = mSize;
             mMemSize += mStart;
-            T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));;
+            T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
             if (temp == NULL) throw std::runtime_error("Not enough memory");
             memcpy(temp + mStart, mPtr, mSize*sizeof(T));
             free(mPtr);
