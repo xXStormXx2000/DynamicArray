@@ -247,6 +247,9 @@ public:
     }
     // Time = O(1)
     // Space = O(1)
+    T front() const { return mPtr[mStart]; }
+    // Time = O(1)
+    // Space = O(1)
     T popFront() {
         if (mSize == 0) throw std::logic_error("Tried to pop front on empty DynamicArray");
         mStart++;
