@@ -183,10 +183,10 @@ public:
         other.mStart = 0;
         return *this;
     }
-    // Time = O(1)
+    // Time = O(n)
     // Space = O(1)
     ~DynamicArray() {
-        for (int i = 0; i < mSize; ++i) (mPtr + mStart + i)->~T();
+        for (int i = 0; i < mSize; ++i) mPtr[mStart + i].~T();
         free(mPtr);
     }
     // Time = O(N) If the sizes match else O(1)
