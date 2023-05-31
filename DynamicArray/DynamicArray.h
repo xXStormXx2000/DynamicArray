@@ -225,7 +225,7 @@ public:
             mMemSize += mStart;
             T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));;
             if (temp == NULL) throw std::runtime_error("Not enough memory");
-            for (int i = 0; i < mSize; i++) temp[mStart + i] = mPtr[i];
+            memcpy(temp + mStart, mPtr, mSize*sizeof(T));
             free(mPtr);
             mPtr = temp;
         }
