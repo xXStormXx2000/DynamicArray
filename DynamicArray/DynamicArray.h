@@ -344,6 +344,17 @@ public:
     Iterator find(const T& val) {
         return find(this->begin(), this->end(), val);
     }
+    // Time = O(N) I want to die
+    // Space = O(N) Please
+    void shrinkToFit() {
+        mStart = 0;
+        mMemSize = mSize;
+        T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
+        if (temp == NULL) throw std::runtime_error("Not enough memory");
+        memcpy(temp, mPtr, mSize * sizeof(T));
+        free(mPtr);
+        mPtr = temp;
+    }
 private:
     T* mPtr;
     size_t mSize;
