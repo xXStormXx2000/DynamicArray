@@ -341,7 +341,7 @@ public:
     // find(const T& val)
     // Time = O(N)
     // Space = O(1)
-    InputIterator find(const T& val) {
+    Iterator find(const T& val) {
         return find(this->begin(), this->end(), val);
     }
 private:
