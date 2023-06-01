@@ -126,7 +126,11 @@ public:
     //Constructor
     // Time = O(1)
     // Space = O(N)
-    DynamicArray(size_t s = 0) : mSize(s), mMemSize(s + 2), mStart(1) {
+    DynamicArray() : mSize(0), mMemSize(0), mStart(0), mPtr(nullptr) {}
+    //Constructor
+    // Time = O(1)
+    // Space = O(N)
+    DynamicArray(size_t s) : mSize(s), mMemSize(s + 2), mStart(1) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
     }
@@ -237,7 +241,7 @@ public:
     // Space = O(N) If a resize is necessary else N(1), the is average is N(1)
     void pushBack(const T& newElem) {
         if (mMemSize == mStart + mSize) {
-            mMemSize += mSize;
+            mMemSize += (mSize > 1 ? mSize : 1);
             T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
             if (temp == NULL) throw std::runtime_error("Not enough memory");
             mPtr = temp;
@@ -250,7 +254,7 @@ public:
     // Space = O(N) If a resize is necessary else N(1), the is average is N(1)
     void pushFront(const T& newElem) {
         if (0 == mStart) {
-            mStart = mSize;
+            mStart = (mSize > 1 ? mSize : 1);
             mMemSize += mStart;
             T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
             if (temp == NULL) throw std::runtime_error("Not enough memory");
