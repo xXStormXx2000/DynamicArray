@@ -20,6 +20,13 @@ public:
         ++(*this);
         return it;
     }
+    DynamicArrayIterator operator+(long long a) {
+        return mPtr + a;
+    }
+    DynamicArrayIterator& operator+=(long long a) {
+        mPtr += a;
+        return *this;
+    }
     DynamicArrayIterator& operator--() {
         mPtr--;
         return *this;
@@ -28,6 +35,13 @@ public:
         DynamicArrayIterator it = *this;
         --(*this);
         return it;
+    }
+    DynamicArrayIterator operator-(long long a) {
+        return mPtr - a;
+    }
+    DynamicArrayIterator& operator-=(long long a) {
+        mPtr -= a;
+        return *this;
     }
     valueType& operator[](size_t index) {
         return *(mPtr[index]);
@@ -63,6 +77,13 @@ public:
         ++(*this);
         return it;
     }
+    DynamicArrayReverseIterator operator+(long long a) {
+        return mPtr - a;
+    }
+    DynamicArrayReverseIterator& operator+=(long long a) {
+        mPtr -= a;
+        return *this;
+    }
     DynamicArrayReverseIterator& operator--() {
         mPtr++;
         return *this;
@@ -71,6 +92,13 @@ public:
         DynamicArrayReverseIterator it = *this;
         --(*this);
         return it;
+    }
+    DynamicArrayReverseIterator operator-(long long a) {
+        return mPtr + a;
+    }
+    DynamicArrayReverseIterator& operator-=(long long a) {
+        mPtr += a;
+        return *this;
     }
     valueType& operator[](size_t index) {
         return *(mPtr[index]);
