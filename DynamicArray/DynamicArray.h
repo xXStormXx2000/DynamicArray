@@ -375,11 +375,31 @@ public:
     // Time = O(N) I want to die
     // Space = O(N) Please
     void shrinkToFit() {
-        mStart = 0;
         mMemSize = mSize;
         T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (temp == NULL) throw std::runtime_error("Not enough memory");
-        memcpy(temp, mPtr, mSize * sizeof(T));
+        memcpy(temp, mPtr + mStart, mSize * sizeof(T));
+        mStart = 0;
+        free(mPtr);
+        mPtr = temp;
+    }
+    // Time = O(N) I want to die
+    // Space = O(N) Please
+    void shrinkToFitFront() {
+        mMemSize -= mStart;
+        T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
+        if (temp == NULL) throw std::runtime_error("Not enough memory");
+        memcpy(temp, mPtr + mStart, mSize * sizeof(T));
+        mStart = 0;
+        free(mPtr);
+        mPtr = temp;
+    }
+    // Time = O(1)
+    // Space = O(1)
+    void shrinkToFitBack() {
+        mMemSize = mSize + mStart;
+        T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
+        if (temp == NULL) throw std::runtime_error("Not enough memory");
         free(mPtr);
         mPtr = temp;
     }
