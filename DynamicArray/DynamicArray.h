@@ -404,7 +404,6 @@ public:
         mMemSize = mSize + mStart;
         T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
         if (temp == NULL) throw std::runtime_error("Not enough memory");
-        free(mPtr);
         mPtr = temp;
     }
 private:
