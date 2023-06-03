@@ -36,7 +36,7 @@ public:
         --(*this);
         return it;
     }
-    DynamicArrayIterator operator-(long long a) {
+    DynamicArrayIterator operator-(long long a) const {
         return mPtr - a;
     }
     DynamicArrayIterator& operator-=(long long a) {
@@ -93,7 +93,7 @@ public:
         --(*this);
         return it;
     }
-    DynamicArrayReverseIterator operator-(long long a) {
+    DynamicArrayReverseIterator operator-(long long a) const {
         return mPtr + a;
     }
     DynamicArrayReverseIterator& operator-=(long long a) {
