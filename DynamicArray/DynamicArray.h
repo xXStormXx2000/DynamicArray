@@ -322,7 +322,7 @@ public:
         DynamicArray temp(end - start);
         size_t start1 = start;
         size_t start2 = mid;
-        for (size_t i = 0; i < temp.size(); ++i) {
+        for (size_t i = 0; i != temp.size(); ++i) {
             if (start1 == mid) {
                 temp[i] = mPtr[mStart + start2];
                 start2++;
@@ -341,7 +341,7 @@ public:
                 start2++;
             }
         }
-        for (size_t i = 0; i < temp.size(); ++i) mPtr[mStart + start + i] = temp[i];
+        for (size_t i = 0; i != temp.size(); ++i) mPtr[mStart + start + i] = temp[i];
     }
     // sort(start inclusive, end exclusive)
     // Time = O(N*log(N)) * copy operator of TYPE
