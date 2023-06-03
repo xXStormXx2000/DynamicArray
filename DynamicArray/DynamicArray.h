@@ -27,6 +27,13 @@ public:
         mPtr += a;
         return *this;
     }
+    DynamicArrayIterator operator-(long long a) {
+        return mPtr - a;
+    }
+    DynamicArrayIterator& operator-=(long long a) {
+        mPtr -= a;
+        return *this;
+    }
     DynamicArrayIterator& operator--() {
         mPtr--;
         return *this;
@@ -82,6 +89,13 @@ public:
     }
     DynamicArrayReverseIterator& operator+=(long long a) {
         mPtr -= a;
+        return *this;
+    }
+    DynamicArrayReverseIterator operator-(long long a) {
+        return mPtr + a;
+    }
+    DynamicArrayReverseIterator& operator-=(long long a) {
+        mPtr += a;
         return *this;
     }
     DynamicArrayReverseIterator& operator--() {
