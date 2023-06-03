@@ -169,10 +169,7 @@ public:
     // Space = O(1)
     DynamicArray(DynamicArray<T>&& other) noexcept : mSize(other.mSize), mMemSize(other.mMemSize), mStart(other.mStart) {
         mPtr = other.mPtr;
-        other.mPtr = nullptr;
-        other.mSize = 0;
-        other.mMemSize = 0;
-        other.mStart = 0;
+        memset(&other, 0, sizeof(DynamicArray<T>));
     }
     //Copy Operator
     // Time = O(N)
@@ -180,9 +177,7 @@ public:
     DynamicArray<T>& operator=(const DynamicArray<T>& other) {
         if(&other == this) return *this;
         this->~DynamicArray();
-        mSize = other.mSize;
-        mMemSize = other.mMemSize;
-        mStart = other.mStart;
+        memcpy(this, &other, sizeof(DynamicArray<T>) - sizeof(T*));
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
         for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
@@ -194,8 +189,8 @@ public:
     DynamicArray<T>& operator = (const std::initializer_list<T>& list) {
         this->~DynamicArray();
         mSize = list.size();
-        mMemSize = list.size() + 2;
-        mStart = 1;
+        mMemSize = list.size();
+        mStart = 0;
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
         size_t count = mStart;
@@ -211,14 +206,8 @@ public:
     DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept {
         if (&other == this) return *this;
         this->~DynamicArray();
-        mSize = other.mSize;
-        mMemSize = other.mMemSize;
-        mStart = other.mStart;
-        mPtr = other.mPtr;
-        other.mPtr = nullptr;
-        other.mSize = 0;
-        other.mMemSize = 0;
-        other.mStart = 0;
+        memcpy(this, &other, sizeof(DynamicArray<T>));
+        memset(&other, 0, sizeof(DynamicArray<T>));
         return *this;
     }
     // Time = O(N)
@@ -413,8 +402,8 @@ public:
         mPtr = temp;
     }
 private:
-    T* mPtr;
     size_t mSize;
     size_t mStart;
     size_t mMemSize;
+    T* mPtr;
 };
