@@ -272,21 +272,21 @@ public:
     T back() const { return mPtr[mStart + mSize - 1]; }
     // Time = O(1)
     // Space = O(1)
-    T popBack() {
+    void popBack() {
         if (mSize == 0) throw std::logic_error("Tried to pop back on empty DynamicArray");
         mSize--;
-        return mPtr[mStart + mSize];
+        mPtr[mStart + mSize].~T();
     }
     // Time = O(1)
     // Space = O(1)
     T front() const { return mPtr[mStart]; }
     // Time = O(1)
     // Space = O(1)
-    T popFront() {
+    void popFront() {
         if (mSize == 0) throw std::logic_error("Tried to pop front on empty DynamicArray");
         mStart++;
         mSize--;
-        return mPtr[mStart - 1];
+        mPtr[mStart - 1].~T();
     }
     // Time = O(1)
     // Space = O(1)
