@@ -417,7 +417,24 @@ public:
         for (size_t i = mStart + n; i != mStart + mSize - 1; ++i) {
             mPtr[i] = std::move(mPtr[i + 1]);
         }
+        if (mSize == 1) mPtr->~T();
         --mSize;
+    }
+    // Time = O(N)
+    // Space = O(1)
+    void insert(size_t n, const T& newElem) {
+        if (n > mSize) {
+            throw std::out_of_range("Out of range");
+        }
+        if (mSize == n) {
+            this->pushBack(newElem);
+            return;
+        }
+        this->pushBack(std::move(this->back()));
+        for (size_t i = mStart + mSize - 2; i != mStart + n; --i) {
+            mPtr[i] = std::move(mPtr[i - 1]);
+        }
+        mPtr[mStart + n] = newElem;
     }
 private:
     size_t mSize;
