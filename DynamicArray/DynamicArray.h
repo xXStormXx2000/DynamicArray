@@ -184,6 +184,7 @@ public:
         mMemSize = other.mMemSize;
         mStart = other.mStart;
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
+        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
         for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
         return *this;
     }
@@ -196,6 +197,7 @@ public:
         mMemSize = list.size() + 2;
         mStart = 1;
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
+        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
         size_t count = mStart;
         for (const T& i : list) {
             mPtr[count] = i;
