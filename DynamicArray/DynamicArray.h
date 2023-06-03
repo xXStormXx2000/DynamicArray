@@ -132,7 +132,7 @@ public:
     DynamicArray(size_t s) : mSize(s), mStart(0), mMemSize(s) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (mPtr == NULL) throw std::runtime_error("Not enough memory");
+        if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
     }
     //Constructor
@@ -141,7 +141,7 @@ public:
     DynamicArray(size_t s, const T& val) : mSize(s), mStart(0), mMemSize(s) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (mPtr == NULL) throw std::runtime_error("Not enough memory");
+        if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (size_t i = mStart; i < mStart + mSize; ++i) mPtr[i] = val;
     }
@@ -150,7 +150,7 @@ public:
     // Space = O(N) * copy operator of TYPE
     DynamicArray(const DynamicArray<T>& other) : mSize(other.mSize), mStart(other.mStart), mMemSize(other.mMemSize) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (mPtr == NULL) throw std::runtime_error("Not enough memory");
+        if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i] = other[i];
     }
@@ -159,7 +159,7 @@ public:
     // Space = O(N) * copy operator of TYPE
     DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mStart(0), mMemSize(list.size()) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (mPtr == NULL) throw std::runtime_error("Not enough memory");
+        if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         int count = mStart;
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (const T& i : list) {
@@ -182,7 +182,7 @@ public:
         this->~DynamicArray();
         memcpy(this, &other, sizeof(DynamicArray<T>) - sizeof(T*));
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (mPtr == NULL) throw std::runtime_error("Not enough memory");
+        if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
         for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
         return *this;
@@ -196,7 +196,7 @@ public:
         mMemSize = list.size();
         mStart = 0;
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (mPtr == NULL) throw std::runtime_error("Not enough memory");
+        if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
         size_t count = mStart;
         for (const T& i : list) {
@@ -245,7 +245,7 @@ public:
         if (mMemSize == mStart + mSize) {
             mMemSize += (mSize > 1 ? mSize : 1);
             T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
-            if (temp == NULL) throw std::runtime_error("Not enough memory");
+            if (temp == nullptr) throw std::runtime_error("Not enough memory");
             mPtr = temp;
         }
         mSize++;
@@ -259,7 +259,7 @@ public:
             mStart = (mSize > 1 ? mSize : 1);
             mMemSize += mStart;
             T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-            if (temp == NULL) throw std::runtime_error("Not enough memory");
+            if (temp == nullptr) throw std::runtime_error("Not enough memory");
             memcpy(temp + mStart, mPtr, mSize*sizeof(T));
             free(mPtr);
             mPtr = temp;
@@ -383,7 +383,7 @@ public:
     void shrinkToFit() {
         mMemSize = mSize;
         T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (temp == NULL) throw std::runtime_error("Not enough memory");
+        if (temp == nullptr) throw std::runtime_error("Not enough memory");
         memcpy(temp, mPtr + mStart, mSize * sizeof(T));
         mStart = 0;
         free(mPtr);
@@ -394,7 +394,7 @@ public:
     void shrinkToFitFront() {
         mMemSize -= mStart;
         T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (temp == NULL) throw std::runtime_error("Not enough memory");
+        if (temp == nullptr) throw std::runtime_error("Not enough memory");
         memcpy(temp, mPtr + mStart, mSize * sizeof(T));
         mStart = 0;
         free(mPtr);
@@ -405,7 +405,7 @@ public:
     void shrinkToFitBack() {
         mMemSize = mSize + mStart;
         T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
-        if (temp == NULL) throw std::runtime_error("Not enough memory");
+        if (temp == nullptr) throw std::runtime_error("Not enough memory");
         mPtr = temp;
     }
 private:
