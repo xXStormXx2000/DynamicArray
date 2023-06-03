@@ -213,8 +213,10 @@ public:
     // Time = O(N) * destructor of TYPE
     // Space = O(1)
     ~DynamicArray() {
-        for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i].~T();
-        free(mPtr);
+        if (mPtr != nullptr) {
+            for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i].~T();
+            free(mPtr);
+        }
     }
     // Time = O(N) * comparatives operator of TYPE If sizes match O(1)
     // Space = O(1) * comparatives operator of TYPE
