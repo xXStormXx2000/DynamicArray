@@ -408,6 +408,17 @@ public:
         if (temp == nullptr) throw std::runtime_error("Not enough memory");
         mPtr = temp;
     }
+    // Time = O(N)
+    // Space = O(1)
+    void erase(size_t n) {
+        if (n >= mSize) {
+            throw std::out_of_range("Out of range");
+        }
+        for (size_t i = mStart + n; i != mStart + mSize - 1; ++i) {
+            mPtr[i] = std::move(mPtr[i + 1]);
+        }
+        --mSize;
+    }
 private:
     size_t mSize;
     size_t mStart;
