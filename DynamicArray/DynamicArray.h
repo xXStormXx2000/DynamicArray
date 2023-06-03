@@ -201,7 +201,7 @@ public:
         return *this;
     }
     //Move Operator
-    // Time = O(1)
+    // Time = O(N)
     // Space = O(1)
     DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept {
         if (&other == this) return *this;
@@ -210,14 +210,14 @@ public:
         memset(&other, 0, sizeof(DynamicArray<T>));
         return *this;
     }
-    // Time = O(N)
+    // Time = O(N) * destructor of TYPE
     // Space = O(1)
     ~DynamicArray() {
         for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i].~T();
         free(mPtr);
     }
-    // Time = O(N) If the sizes match else O(1)
-    // Space = O(1)
+    // Time = O(N) * comparatives operator of TYPE If sizes match O(1)
+    // Space = O(1) * comparatives operator of TYPE
     bool operator==(const DynamicArray<T>& other) const {
         if (mSize != other.mSize) return false;
         for (size_t i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other[i]) return false;
@@ -232,8 +232,8 @@ public:
     // Time = O(1)
     // Space = O(1)
     size_t size() const { return mSize; }
-    // Time = O(N) If a resize is necessary else N(1), the is average is N(1)
-    // Space = O(N) If a resize is necessary else N(1), the is average is N(1)
+    // Time = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
+    // Space = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
     void pushBack(const T& newElem) {
         if (mMemSize == mStart + mSize) {
             mMemSize += (mSize > 1 ? mSize : 1);
@@ -245,8 +245,8 @@ public:
         memset(mPtr + mStart + mSize - 1, 0, sizeof(T)); //copy operator is a b****
         mPtr[mStart + mSize - 1] = newElem;
     }
-    // Time = O(N) If a resize is necessary else N(1), the is average is N(1)
-    // Space = O(N) If a resize is necessary else N(1), the is average is N(1)
+    // Time = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
+    // Space = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
     void pushFront(const T& newElem) {
         if (0 == mStart) {
             mStart = (mSize > 1 ? mSize : 1);
@@ -304,8 +304,8 @@ public:
         return ReverseIterator(mPtr + mStart - 1);
     }
     // sort(start inclusive, end exclusive, bool function pointer)
-    // Time = O(N*log(N))
-    // Space = O(N)
+    // Time = O(N*log(N)) * (function + copy operator of TYPE)
+    // Space = O(N) * (function + copy operator of TYPE)
     void sort(size_t start, size_t end, bool (*function)(const T&, const T&)) {
         if (start > end) throw std::invalid_argument("Start is past End");
         if (start == end - 1 || start == end) return;
@@ -337,19 +337,19 @@ public:
         for (size_t i = 0; i < temp.size(); ++i) mPtr[mStart + start + i] = temp[i];
     }
     // sort(start inclusive, end exclusive)
-    // Time = O(N*log(N))
-    // Space = O(N)
+    // Time = O(N*log(N)) * copy operator of TYPE
+    // Space = O(N) * copy operator of TYPE
     void sort(size_t start, size_t end) {
         this->sort(start, end, [](const T& a, const T& b) { return a < b; });
     }
-    // Time = O(N*log(N))
-    // Space = O(N)
+    // Time = O(N*log(N)) * copy operator of TYPE
+    // Space = O(N) * copy operator of TYPE
     void sort() {
         this->sort(0, mSize);
     }
     // find(Iterator first, Iterator last, const T& val, bool function pointer)
-    // Time = O(N)
-    // Space = O(1)
+    // Time = O(N) * function
+    // Space = O(1) * function
     template <typename InputIterator>
     InputIterator find(InputIterator first, InputIterator last, const T& val, bool (*function)(const T&, const T&)) {
         while (first != last) {
