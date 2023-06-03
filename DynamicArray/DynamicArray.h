@@ -133,7 +133,7 @@ public:
     DynamicArray(size_t s) : mSize(s), mMemSize(s), mStart(0) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        memset(mPtr + mStart, 0, mSize * sizeof(T));
+        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
     }
     //Constructor
     // Time = O(N)
@@ -141,6 +141,7 @@ public:
     DynamicArray(size_t s, const T& val) : mSize(s), mMemSize(s), mStart(0) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
+        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (size_t i = mStart; i < mStart + mSize; ++i) mPtr[i] = val;
     }
     //Copy constructor
@@ -148,7 +149,8 @@ public:
     // Space = O(N)
     DynamicArray(const DynamicArray<T>& other) : mSize(other.mSize), mMemSize(other.mMemSize), mStart(other.mStart) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
+        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
+        for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i] = other[i];
     }
     //Copy initializer list constructor
     // Time = O(N)
@@ -156,6 +158,7 @@ public:
     DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mMemSize(list.size()), mStart(0) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         int count = mStart;
+        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (const T& i : list) {
             mPtr[count] = i;
             count++;
@@ -248,7 +251,7 @@ public:
             mPtr = temp;
         }
         mSize++;
-        memset(mPtr + mStart + mSize - 1, 0, sizeof(T));
+        memset(mPtr + mStart + mSize - 1, 0, sizeof(T)); //copy operator is a b****
         mPtr[mStart + mSize - 1] = newElem;
     }
     // Time = O(N) If a resize is necessary else N(1), the is average is N(1)
@@ -265,7 +268,7 @@ public:
         }
         mStart--;
         mSize++;
-        memset(mPtr + mStart, 0, sizeof(T));
+        memset(mPtr + mStart, 0, sizeof(T)); //copy operator is a b****
         mPtr[mStart] = newElem;
     }
     // Time = O(1)
