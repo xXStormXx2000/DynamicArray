@@ -136,8 +136,8 @@ public:
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
     }
     //Constructor
-    // Time = O(N)
-    // Space = O(N)
+    // Time = O(N) * copy operator of TYPE
+    // Space = O(N) * copy operator of TYPE
     DynamicArray(size_t s, const T& val) : mSize(s), mMemSize(s), mStart(0) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
@@ -145,16 +145,16 @@ public:
         for (size_t i = mStart; i < mStart + mSize; ++i) mPtr[i] = val;
     }
     //Copy constructor
-    // Time = O(N)
-    // Space = O(N)
+    // Time = O(N) * copy operator of TYPE
+    // Space = O(N) * copy operator of TYPE
     DynamicArray(const DynamicArray<T>& other) : mSize(other.mSize), mMemSize(other.mMemSize), mStart(other.mStart) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i] = other[i];
     }
     //Copy initializer list constructor
-    // Time = O(N)
-    // Space = O(N)
+    // Time = O(N) * copy operator of TYPE
+    // Space = O(N) * copy operator of TYPE
     DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mMemSize(list.size()), mStart(0) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         int count = mStart;
@@ -172,8 +172,8 @@ public:
         memset(&other, 0, sizeof(DynamicArray<T>));
     }
     //Copy Operator
-    // Time = O(N)
-    // Space = O(N)
+    // Time = O(N) * copy operator of TYPE
+    // Space = O(N) * copy operator of TYPE
     DynamicArray<T>& operator=(const DynamicArray<T>& other) {
         if(&other == this) return *this;
         this->~DynamicArray();
@@ -184,8 +184,8 @@ public:
         return *this;
     }
     //Copy Initializer list Operator
-    // Time = O(N)
-    // Space = O(N)
+    // Time = O(N) * copy operator of TYPE
+    // Space = O(N) * copy operator of TYPE
     DynamicArray<T>& operator = (const std::initializer_list<T>& list) {
         this->~DynamicArray();
         mSize = list.size();
