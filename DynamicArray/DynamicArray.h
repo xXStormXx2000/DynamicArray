@@ -125,11 +125,11 @@ public:
     //Constructor
     // Time = O(1)
     // Space = O(1)
-    DynamicArray() : mSize(0), mMemSize(0), mStart(0), mPtr(nullptr) {}
+    DynamicArray() : mSize(0), mStart(0), mMemSize(0), mPtr(nullptr) {}
     //Constructor
     // Time = O(N)
     // Space = O(N)
-    DynamicArray(size_t s) : mSize(s), mMemSize(s), mStart(0) {
+    DynamicArray(size_t s) : mSize(s), mStart(0), mMemSize(s) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
@@ -137,7 +137,7 @@ public:
     //Constructor
     // Time = O(N) * copy operator of TYPE
     // Space = O(N) * copy operator of TYPE
-    DynamicArray(size_t s, const T& val) : mSize(s), mMemSize(s), mStart(0) {
+    DynamicArray(size_t s, const T& val) : mSize(s), mStart(0), mMemSize(s) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
@@ -146,7 +146,7 @@ public:
     //Copy constructor
     // Time = O(N) * copy operator of TYPE
     // Space = O(N) * copy operator of TYPE
-    DynamicArray(const DynamicArray<T>& other) : mSize(other.mSize), mMemSize(other.mMemSize), mStart(other.mStart) {
+    DynamicArray(const DynamicArray<T>& other) : mSize(other.mSize), mStart(other.mStart), mMemSize(other.mMemSize) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i] = other[i];
@@ -154,7 +154,7 @@ public:
     //Copy initializer list constructor
     // Time = O(N) * copy operator of TYPE
     // Space = O(N) * copy operator of TYPE
-    DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mMemSize(list.size()), mStart(0) {
+    DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mStart(0), mMemSize(list.size()) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         int count = mStart;
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
@@ -166,7 +166,7 @@ public:
     //Move constructor
     // Time = O(1)
     // Space = O(1)
-    DynamicArray(DynamicArray<T>&& other) noexcept : mSize(other.mSize), mMemSize(other.mMemSize), mStart(other.mStart) {
+    DynamicArray(DynamicArray<T>&& other) noexcept : mSize(other.mSize), mStart(other.mStart), mMemSize(other.mMemSize) {
         mPtr = other.mPtr;
         memset(&other, 0, sizeof(DynamicArray<T>));
     }
