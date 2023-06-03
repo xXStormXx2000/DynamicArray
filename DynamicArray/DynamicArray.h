@@ -125,19 +125,20 @@ public:
     using ReverseIterator = DynamicArrayReverseIterator<DynamicArray<T>>;
     //Constructor
     // Time = O(1)
-    // Space = O(N)
+    // Space = O(1)
     DynamicArray() : mSize(0), mMemSize(0), mStart(0), mPtr(nullptr) {}
     //Constructor
-    // Time = O(1)
+    // Time = O(N)
     // Space = O(N)
-    DynamicArray(size_t s) : mSize(s), mMemSize(s + 2), mStart(1) {
+    DynamicArray(size_t s) : mSize(s), mMemSize(s), mStart(0) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
+        memset(mPtr + mStart, 0, mSize * sizeof(T));
     }
     //Constructor
     // Time = O(N)
     // Space = O(N)
-    DynamicArray(size_t s, const T& val) : mSize(s), mMemSize(s + 2), mStart(1) {
+    DynamicArray(size_t s, const T& val) : mSize(s), mMemSize(s), mStart(0) {
         if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         for (size_t i = mStart; i < mStart + mSize; ++i) mPtr[i] = val;
@@ -152,7 +153,7 @@ public:
     //Copy initializer list constructor
     // Time = O(N)
     // Space = O(N)
-    DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mMemSize(list.size() + 1), mStart(0) {
+    DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mMemSize(list.size()), mStart(0) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         int count = mStart;
         for (const T& i : list) {
@@ -175,10 +176,10 @@ public:
     // Space = O(N)
     DynamicArray<T>& operator=(const DynamicArray<T>& other) {
         if(&other == this) return *this;
+        this->~DynamicArray();
         mSize = other.mSize;
         mMemSize = other.mMemSize;
         mStart = other.mStart;
-        free(mPtr);
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
         return *this;
@@ -187,10 +188,10 @@ public:
     // Time = O(N)
     // Space = O(N)
     DynamicArray<T>& operator = (const std::initializer_list<T>& list) {
+        this->~DynamicArray();
         mSize = list.size();
         mMemSize = list.size() + 2;
         mStart = 1;
-        free(mPtr);
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         size_t count = mStart;
         for (const T& i : list) {
@@ -204,10 +205,10 @@ public:
     // Space = O(1)
     DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept {
         if (&other == this) return *this;
+        this->~DynamicArray();
         mSize = other.mSize;
         mMemSize = other.mMemSize;
         mStart = other.mStart;
-        free(mPtr);
         mPtr = other.mPtr;
         other.mPtr = nullptr;
         other.mSize = 0;
@@ -272,21 +273,21 @@ public:
     T back() const { return mPtr[mStart + mSize - 1]; }
     // Time = O(1)
     // Space = O(1)
-    void popBack() {
+    T popBack() {
         if (mSize == 0) throw std::logic_error("Tried to pop back on empty DynamicArray");
         mSize--;
-        mPtr[mStart + mSize].~T();
+        return std::move(mPtr[mStart + mSize]);
     }
     // Time = O(1)
     // Space = O(1)
     T front() const { return mPtr[mStart]; }
     // Time = O(1)
     // Space = O(1)
-    void popFront() {
+    T popFront() {
         if (mSize == 0) throw std::logic_error("Tried to pop front on empty DynamicArray");
         mStart++;
         mSize--;
-        mPtr[mStart - 1].~T();
+        return std::move(mPtr[mStart - 1]);
     }
     // Time = O(1)
     // Space = O(1)
