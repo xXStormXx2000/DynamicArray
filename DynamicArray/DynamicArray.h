@@ -414,10 +414,8 @@ public:
         if (n >= mSize) {
             throw std::out_of_range("Out of range");
         }
-        for (size_t i = mStart + n; i != mStart + mSize - 1; ++i) {
-            mPtr[i] = std::move(mPtr[i + 1]);
-        }
-        if (mSize == 1) mPtr->~T();
+        mPtr[n].~T();
+        memcpy(mPtr + n, mPtr + n + 1, (mSize - n - 1)*sizeof(T));
         --mSize;
     }
     // Time = O(N)
@@ -431,9 +429,8 @@ public:
             return;
         }
         this->pushBack(std::move(this->back()));
-        for (size_t i = mStart + mSize - 2; i != mStart + n; --i) {
-            mPtr[i] = std::move(mPtr[i - 1]);
-        }
+        memcpy(mPtr + n + 1, mPtr + n, (mSize - n - 1) * sizeof(T));
+        memset(mPtr + mStart + n, 0, sizeof(T)); //copy operator is a b****
         mPtr[mStart + n] = newElem;
     }
 private:
