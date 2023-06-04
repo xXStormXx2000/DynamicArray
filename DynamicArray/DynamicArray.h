@@ -132,36 +132,33 @@ public:
     DynamicArray(size_t s) : mSize(s), mStart(0), mMemSize(s) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
-        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
+        new (mPtr + mStart) T[mSize];
     }
     //Constructor
-    // Time = O(N) * copy operator of TYPE
-    // Space = O(N) * copy operator of TYPE
+    // Time = O(N) * copy constructor of TYPE
+    // Space = O(N) * copy constructor of TYPE
     DynamicArray(size_t s, const T& val) : mSize(s), mStart(0), mMemSize(s) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
-        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
-        for (size_t i = mStart; i < mStart + mSize; ++i) mPtr[i] = val;
+        for (size_t i = mStart; i < mStart + mSize; ++i) new (mPtr + i) T(val);
     }
     //Copy constructor
-    // Time = O(N) * copy operator of TYPE
-    // Space = O(N) * copy operator of TYPE
+    // Time = O(N) * copy constructor of TYPE
+    // Space = O(N) * copy constructor of TYPE
     DynamicArray(const DynamicArray<T>& other) : mSize(other.mSize), mStart(other.mStart), mMemSize(other.mMemSize) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
-        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
-        for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i] = other.at(i);
+        for (size_t i = 0; i < mSize; ++i) new (mPtr + mStart + i) T(other.at(i));
     }
     //Copy initializer list constructor
-    // Time = O(N) * copy operator of TYPE
-    // Space = O(N) * copy operator of TYPE
+    // Time = O(N) * copy constructor of TYPE
+    // Space = O(N) * copy constructor of TYPE
     DynamicArray(const std::initializer_list<T>& list) : mSize(list.size()), mStart(0), mMemSize(list.size()) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         int count = mStart;
-        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
         for (const T& i : list) {
-            mPtr[count] = i;
+            new (mPtr + count) T(i);
             count++;
         }
     }
@@ -173,21 +170,20 @@ public:
         memset(&other, 0, sizeof(DynamicArray<T>));
     }
     //Copy Operator
-    // Time = O(N) * copy operator of TYPE
-    // Space = O(N) * copy operator of TYPE
+    // Time = O(N) * copy constructor of TYPE
+    // Space = O(N) * copy constructor of TYPE
     DynamicArray<T>& operator=(const DynamicArray<T>& other) {
         if(&other == this) return *this;
         this->~DynamicArray();
         memcpy(this, &other, sizeof(DynamicArray<T>) - sizeof(T*));
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
-        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
-        for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other.at(i);
+        for (size_t i = 0; i < other.mSize; ++i) new (mPtr + mStart + i) T(other.at(i));
         return *this;
     }
     //Copy Initializer list Operator
-    // Time = O(N) * copy operator of TYPE
-    // Space = O(N) * copy operator of TYPE
+    // Time = O(N) * copy constructor of TYPE
+    // Space = O(N) * copy constructor of TYPE
     DynamicArray<T>& operator = (const std::initializer_list<T>& list) {
         this->~DynamicArray();
         mSize = list.size();
@@ -195,10 +191,9 @@ public:
         mStart = 0;
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
-        memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
         size_t count = mStart;
         for (const T& i : list) {
-            mPtr[count] = i;
+            new (mPtr + count) T(i);
             count++;
         }
         return *this;
@@ -248,8 +243,8 @@ public:
     // Time = O(1)
     // Space = O(1)
     size_t size() const { return mSize; }
-    // Time = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
-    // Space = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
+    // Time = O(N) If a resize is necessary else N(1), the is average is N(1) * copy constructor of TYPE
+    // Space = O(N) If a resize is necessary else N(1), the is average is N(1) * copy constructor of TYPE
     void pushBack(const T& newElem) {
         if (mMemSize == mStart + mSize) {
             mMemSize += (mSize > 1 ? mSize : 1);
@@ -258,11 +253,10 @@ public:
             mPtr = temp;
         }
         mSize++;
-        memset(mPtr + mStart + mSize - 1, 0, sizeof(T)); //copy operator is a b****
-        mPtr[mStart + mSize - 1] = newElem;
+        new (mPtr + mStart + mSize - 1) T(newElem);
     }
-    // Time = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
-    // Space = O(N) If a resize is necessary else N(1), the is average is N(1) * copy operator of TYPE
+    // Time = O(N) If a resize is necessary else N(1), the is average is N(1) * copy constructor of TYPE
+    // Space = O(N) If a resize is necessary else N(1), the is average is N(1) * copy constructor of TYPE
     void pushFront(const T& newElem) {
         if (0 == mStart) {
             mStart = (mSize > 1 ? mSize : 1);
@@ -275,11 +269,10 @@ public:
         }
         mStart--;
         mSize++;
-        memset(mPtr + mStart, 0, sizeof(T)); //copy operator is a b****
-        mPtr[mStart] = newElem;
+        new (mPtr + mStart) T(newElem);
     }
-    // Time = O(1) * copy operator of TYPE
-    // Space = O(1) * copy operator of TYPE
+    // Time = O(1) * copy constructor of TYPE
+    // Space = O(1) * copy constructor of TYPE
     T back() const { return mPtr[mStart + mSize - 1]; }
     // Time = O(1)
     // Space = O(1)
@@ -288,8 +281,8 @@ public:
         mSize--;
         return std::move(mPtr[mStart + mSize]);
     }
-    // Time = O(1) * copy operator of TYPE
-    // Space = O(1) * copy operator of TYPE
+    // Time = O(1) * copy constructor of TYPE
+    // Space = O(1) * copy constructor of TYPE
     T front() const { return mPtr[mStart]; }
     // Time = O(1)
     // Space = O(1)
@@ -425,8 +418,8 @@ public:
         --mSize;
     }
     // Insert element at index
-    // Time = O(N) + copy operator of TYPE
-    // Space = O(1) + copy operator of TYPE
+    // Time = O(N) + copy constructor of TYPE
+    // Space = O(1) + copy constructor of TYPE
     void insert(size_t n, const T& newElem) {
         if (n > mSize) {
             throw std::out_of_range("Out of range");
@@ -437,8 +430,7 @@ public:
         }
         this->pushBack(std::move(this->back()));
         memcpy(mPtr + n + 1, mPtr + n, (mSize - n - 1) * sizeof(T));
-        memset(mPtr + mStart + n, 0, sizeof(T)); //copy operator is a b****
-        mPtr[mStart + n] = newElem;
+        new (mPtr + mStart + n) T(newElem);
     }
 private:
     size_t mSize;
