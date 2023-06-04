@@ -130,7 +130,6 @@ public:
     // Time = O(N)
     // Space = O(N)
     DynamicArray(size_t s) : mSize(s), mStart(0), mMemSize(s) {
-        if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
@@ -139,7 +138,6 @@ public:
     // Time = O(N) * copy operator of TYPE
     // Space = O(N) * copy operator of TYPE
     DynamicArray(size_t s, const T& val) : mSize(s), mStart(0), mMemSize(s) {
-        if (s < 0) throw std::invalid_argument("The size is negative");
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
@@ -369,6 +367,7 @@ public:
     // Time = O(N) * function
     // Space = O(1) * function
     int find(int start, int end, const T& val, bool (*function)(const T&, const T&)) const {
+        if (start > end) throw std::invalid_argument("Start is past End");
         for (int i = start; i != end; ++i) {
             if (function(mPtr[mStart + i], val)) return i;
         }
@@ -377,7 +376,6 @@ public:
     // find(start, end, value)
     // Time = O(N)
     // Space = O(1)
-    template <typename InputIterator>
     int find(int start, int end, const T& val) const {
         return find(start, end, val, [](const T& a, const T& b) { return a == b; });
     }
