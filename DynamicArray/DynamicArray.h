@@ -391,7 +391,7 @@ public:
         mMemSize = mSize;
         memcpy(mPtr, mPtr + mStart, mSize * sizeof(T));
         mStart = 0;
-        T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
+        T* temp = static_cast<T*>(realloc(mMemSize * sizeof(T)));
         if (temp == nullptr) throw std::runtime_error("Not enough memory");
         free(mPtr);
         mPtr = temp;
