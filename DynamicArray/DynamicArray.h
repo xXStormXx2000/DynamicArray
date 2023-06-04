@@ -237,8 +237,14 @@ public:
     }
     // Time = O(1)
     // Space = O(1)
-    T& operator[](size_t n) const {
-        if (n >= mSize || n < 0) throw std::out_of_range("Out of range");
+    T& operator[](size_t n) {
+        if (n >= mSize) throw std::out_of_range("Out of range");
+        return mPtr[mStart + n];
+    }
+    // Time = O(1)
+    // Space = O(1)
+    const T& at(size_t n) const {
+        if (n >= mSize) throw std::out_of_range("Out of range");
         return mPtr[mStart + n];
     }
     // Time = O(1)
@@ -297,22 +303,22 @@ public:
     }
     // Time = O(1)
     // Space = O(1)
-    Iterator begin() const {
+    Iterator begin() {
         return Iterator(mPtr + mStart);
     }
     // Time = O(1)
     // Space = O(1)
-    Iterator end() const {
+    Iterator end() {
         return Iterator(mPtr + mStart + mSize);
     }
     // Time = O(1)
     // Space = O(1)
-    ReverseIterator rBegin() const {
+    ReverseIterator rBegin() {
         return ReverseIterator(mPtr + mStart + mSize - 1);
     }
     // Time = O(1)
     // Space = O(1)
-    ReverseIterator rEnd() const {
+    ReverseIterator rEnd() {
         return ReverseIterator(mPtr + mStart - 1);
     }
     // sort(start inclusive, end exclusive, bool function pointer)
@@ -359,29 +365,27 @@ public:
     void sort() {
         this->sort(0, mSize);
     }
-    // find(Iterator first, Iterator last, const T& val, bool function pointer)
+    // find(start, end, value, bool function pointer)
     // Time = O(N) * function
     // Space = O(1) * function
-    template <typename InputIterator>
-    InputIterator find(InputIterator first, InputIterator last, const T& val, bool (*function)(const T&, const T&)) {
-        while (first != last) {
-            if (function(*first, val)) return first;
-            ++first;
+    int find(int start, int end, const T& val, bool (*function)(const T&, const T&)) const {
+        for (int i = start; i != end; ++i) {
+            if (function(mPtr[mStart + i], val)) return i;
         }
-        return last;
+        return -1;
     }
-    // find(Iterator first, Iterator last, const T& val)
+    // find(start, end, value)
     // Time = O(N)
     // Space = O(1)
     template <typename InputIterator>
-    InputIterator find(InputIterator first, InputIterator last, const T& val) {
-        return find(first, last, val, [](const T& a, const T& b) { return a == b; });
+    int find(int start, int end, const T& val) const {
+        return find(start, end, val, [](const T& a, const T& b) { return a == b; });
     }
     // find(const T& val)
     // Time = O(N)
     // Space = O(1)
-    Iterator find(const T& val) {
-        return find(this->begin(), this->end(), val);
+    int find(const T& val) const {
+        return find(0, mSize, val);
     }
     // Time = O(N) I want to die
     // Space = O(N) Please
@@ -413,6 +417,7 @@ public:
         if (temp == nullptr) throw std::runtime_error("Not enough memory");
         mPtr = temp;
     }
+    // Erase element at index
     // Time = O(N)
     // Space = O(1)
     void erase(size_t n) {
@@ -423,6 +428,7 @@ public:
         memcpy(mPtr + n, mPtr + n + 1, (mSize - n - 1)*sizeof(T));
         --mSize;
     }
+    // Insert element at index
     // Time = O(N)
     // Space = O(1)
     void insert(size_t n, const T& newElem) {
