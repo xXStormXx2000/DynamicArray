@@ -150,7 +150,7 @@ public:
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is a b****
-        for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i] = other[i];
+        for (size_t i = 0; i < mSize; ++i) mPtr[mStart + i] = other.at(i);
     }
     //Copy initializer list constructor
     // Time = O(N) * copy operator of TYPE
@@ -182,7 +182,7 @@ public:
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
         memset(mPtr + mStart, 0, mSize * sizeof(T)); //copy operator is still a b****
-        for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other[i];
+        for (size_t i = 0; i < other.mSize; ++i) mPtr[mStart + i] = other.at(i);
         return *this;
     }
     //Copy Initializer list Operator
@@ -225,7 +225,7 @@ public:
     // Space = O(1) * comparatives operator of TYPE
     bool operator==(const DynamicArray<T>& other) const {
         if (mSize != other.mSize) return false;
-        for (size_t i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other[i]) return false;
+        for (size_t i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other.at(i)) return false;
         return true;
     }
     // Time = O(N) * comparatives operator of TYPE If sizes match O(1)
