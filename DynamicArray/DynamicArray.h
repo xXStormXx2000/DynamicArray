@@ -393,7 +393,6 @@ public:
         mStart = 0;
         T* temp = static_cast<T*>(realloc(mPtr, mMemSize * sizeof(T)));
         if (temp == nullptr) throw std::runtime_error("Not enough memory");
-        free(mPtr);
         mPtr = temp;
     }
     // Time = O(N) I want to die
