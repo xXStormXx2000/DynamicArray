@@ -278,8 +278,8 @@ public:
         memset(mPtr + mStart, 0, sizeof(T)); //copy operator is a b****
         mPtr[mStart] = newElem;
     }
-    // Time = O(1)
-    // Space = O(1)
+    // Time = O(1) * copy operator of TYPE
+    // Space = O(1) * copy operator of TYPE
     T back() const { return mPtr[mStart + mSize - 1]; }
     // Time = O(1)
     // Space = O(1)
@@ -288,8 +288,8 @@ public:
         mSize--;
         return std::move(mPtr[mStart + mSize]);
     }
-    // Time = O(1)
-    // Space = O(1)
+    // Time = O(1) * copy operator of TYPE
+    // Space = O(1) * copy operator of TYPE
     T front() const { return mPtr[mStart]; }
     // Time = O(1)
     // Space = O(1)
@@ -425,8 +425,8 @@ public:
         --mSize;
     }
     // Insert element at index
-    // Time = O(N)
-    // Space = O(1)
+    // Time = O(N) + copy operator of TYPE
+    // Space = O(1) + copy operator of TYPE
     void insert(size_t n, const T& newElem) {
         if (n > mSize) {
             throw std::out_of_range("Out of range");
