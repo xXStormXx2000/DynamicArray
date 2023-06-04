@@ -386,25 +386,24 @@ public:
         return find(0, mSize, val);
     }
     // Time = O(N) I want to die
-    // Space = O(N) Please
+    // Space = O(1)
     void shrinkToFit() {
         mMemSize = mSize;
+        memcpy(mPtr, mPtr + mStart, mSize * sizeof(T));
+        mStart = 0;
         T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (temp == nullptr) throw std::runtime_error("Not enough memory");
-        memcpy(temp, mPtr + mStart, mSize * sizeof(T));
-        mStart = 0;
         free(mPtr);
         mPtr = temp;
     }
     // Time = O(N) I want to die
-    // Space = O(N) Please
+    // Space = O(1)
     void shrinkToFitFront() {
         mMemSize -= mStart;
-        T* temp = static_cast<T*>(malloc(mMemSize * sizeof(T)));
-        if (temp == nullptr) throw std::runtime_error("Not enough memory");
-        memcpy(temp, mPtr + mStart, mSize * sizeof(T));
+        memcpy(mPtr, mPtr + mStart, mSize * sizeof(T));
         mStart = 0;
-        free(mPtr);
+        T* temp = static_cast<T*>(realloc(mMemSize * sizeof(T)));
+        if (temp == nullptr) throw std::runtime_error("Not enough memory");
         mPtr = temp;
     }
     // Time = O(1)
