@@ -230,6 +230,11 @@ public:
         for (size_t i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other[i]) return false;
         return true;
     }
+    // Time = O(N) * comparatives operator of TYPE If sizes match O(1)
+    // Space = O(1) * comparatives operator of TYPE
+    bool operator!=(const DynamicArray<T>& other) const {
+        return !(*this == other);
+    }
     // Time = O(1)
     // Space = O(1)
     T& operator[](size_t n) const {
