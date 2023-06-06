@@ -127,12 +127,11 @@ public:
     // Space = O(1)
     DynamicArray() : mSize(0), mStart(0), mMemSize(0), mPtr(nullptr) {}
     //Constructor
-    // Time = O(N)
+    // Time = O(1)
     // Space = O(N)
     DynamicArray(size_t s) : mSize(s), mStart(0), mMemSize(s) {
         mPtr = static_cast<T*>(malloc(mMemSize * sizeof(T)));
         if (mPtr == nullptr) throw std::runtime_error("Not enough memory");
-        new (mPtr + mStart) T[mSize];
     }
     //Constructor
     // Time = O(N) * copy constructor of TYPE
