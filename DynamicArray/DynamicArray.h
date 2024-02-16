@@ -215,14 +215,14 @@ public:
             free(mPtr);
         }
     }
-    // Time = O(N) * comparatives operator of TYPE If sizes match O(1)
+    // Time = O(N) * comparatives operator of TYPE     If sizes don't match O(1)
     // Space = O(1) * comparatives operator of TYPE
     bool operator==(const DynamicArray<T>& other) const {
         if (mSize != other.mSize) return false;
         for (size_t i = 0; i < mSize; ++i) if (mPtr[mStart + i] != other.at(i)) return false;
         return true;
     }
-    // Time = O(N) * comparatives operator of TYPE If sizes match O(1)
+    // Time = O(N) * comparatives operator of TYPE     If sizes match O(1)
     // Space = O(1) * comparatives operator of TYPE
     bool operator!=(const DynamicArray<T>& other) const {
         return !(*this == other);
@@ -230,20 +230,20 @@ public:
     // Time = O(1)
     // Space = O(1)
     T& operator[](size_t n) {
-        if (n >= mSize) throw std::out_of_range("Out of range");
+        if (n >= mSize || n < 0) throw std::out_of_range("Out of range");
         return mPtr[mStart + n];
     }
     // Time = O(1)
     // Space = O(1)
     const T& at(size_t n) const {
-        if (n >= mSize) throw std::out_of_range("Out of range");
+        if (n >= mSize  || n < 0) throw std::out_of_range("Out of range");
         return mPtr[mStart + n];
     }
     // Time = O(1)
     // Space = O(1)
     size_t size() const { return mSize; }
-    // Time = O(N) If a resize is necessary else N(1), the is average is N(1) * copy constructor of TYPE
-    // Space = O(N) If a resize is necessary else N(1), the is average is N(1) * copy constructor of TYPE
+    // Time = O(N) If a resize is necessary else N(1), the average is N(1) * copy constructor of TYPE
+    // Space = O(N) If a resize is necessary else N(1), the average is N(1) * copy constructor of TYPE
     void pushBack(const T& newElem) {
         if (mMemSize == mStart + mSize) {
             mMemSize += (mSize > 1 ? mSize : 1);
@@ -377,7 +377,7 @@ public:
     int find(const T& val) const {
         return find(0, mSize, val);
     }
-    // Time = O(N) I want to die
+    // Time = O(N) 
     // Space = O(1)
     void shrinkToFit() {
         mMemSize = mSize;
@@ -387,7 +387,7 @@ public:
         if (temp == nullptr) throw std::runtime_error("Not enough memory");
         mPtr = temp;
     }
-    // Time = O(N) I want to die
+    // Time = O(N)
     // Space = O(1)
     void shrinkToFitFront() {
         mMemSize -= mStart;
@@ -409,9 +409,7 @@ public:
     // Time = O(N)
     // Space = O(1)
     void erase(size_t n) {
-        if (n >= mSize) {
-            throw std::out_of_range("Out of range");
-        }
+        if (n >= mSize || n < 0) throw std::out_of_range("Out of range");
         mPtr[n].~T();
         memcpy(mPtr + n, mPtr + n + 1, (mSize - n - 1)*sizeof(T));
         --mSize;
@@ -420,9 +418,7 @@ public:
     // Time = O(N) + copy constructor of TYPE
     // Space = O(1) + copy constructor of TYPE
     void insert(size_t n, const T& newElem) {
-        if (n > mSize) {
-            throw std::out_of_range("Out of range");
-        }
+        if (n > mSize || n < 0) throw std::out_of_range("Out of range");
         if (mSize == n) {
             this->pushBack(newElem);
             return;
